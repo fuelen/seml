@@ -21,8 +21,12 @@ defmodule Seml.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      # FIXME: not a part of Seml
       {:html_entities, "~> 0.4"},
-      {:tzdata, "~> 1.0.3"}
+      # FIXME: not a part of Seml
+      {:tzdata, "~> 1.0.3"},
+      # TODO: make optional
+      {:norm, "~> 0.12.0"}
     ]
   end
 end

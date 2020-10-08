@@ -1,7 +1,7 @@
 defmodule Test do
   import EmailSystem
 
-  def run do
+  def run(opts \\ []) do
     context = %{
       translate: %{
         warn_on_unknown_pattern: false
@@ -15,8 +15,8 @@ defmodule Test do
       }
     }
 
-    {Seml.Compiler.compile(template(), context, EmailSystem.Compilers.HTML),
-     Seml.Compiler.compile(template(), context, EmailSystem.Compilers.Text)}
+    {Seml.Compiler.compile(template(), context, EmailSystem.Compilers.HTML, opts),
+     Seml.Compiler.compile(template(), context, EmailSystem.Compilers.Text, opts)}
   end
 
   def template do

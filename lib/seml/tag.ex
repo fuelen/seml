@@ -1,6 +1,6 @@
 defmodule Seml.Tag do
   @enforce_keys [:name, :attributes, :content, :implementation]
-  defstruct [:name, :attributes, :content, :implementation]
+  defstruct [:name, :attributes, :content, :implementation, :stacktrace]
 
   defimpl Inspect do
     import Inspect.Algebra
@@ -22,8 +22,10 @@ defmodule Seml.Tag do
   end
 
   @callback name() :: atom()
-  # @callback allowed_content() :: [{:tags, {:all_except | :only, atom() | nonempty_list(atom())} | :none} | {:values, :all | :none}]
-  # @callback compilers() :: [atom()]
-  # @callback conform_attributes(map()) :: :ok | {:error, any()}
   @callback compile(compile_fn :: fun(), term(), map()) :: term()
+  @callback attributes_analyzer() :: Seml.Tag.Analyzer.t()
+  @callback content_analyzer() :: Seml.Tag.Analyzer.t()
+  @callback context_analyzer() :: Seml.Tag.Analyzer.t()
+
+  @optional_callbacks attributes_analyzer: 0, content_analyzer: 0, context_analyzer: 0
 end
