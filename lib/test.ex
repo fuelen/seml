@@ -4,7 +4,7 @@ defmodule Test do
   def run(opts \\ []) do
     context = %{
       translate: %{
-        warn_on_unknown_pattern: false
+        warn_on_unknown_pattern: true
       },
       datetime: %{timezone: "Africa/Casablanca"},
       appearance: %{
@@ -32,7 +32,9 @@ defmodule Test do
             "Hello %{name}!"
             horizontal_line()
             "Let me show you what is the time in %{country}"
+
             time(value: ~T[15:47:08.021629], format: "%I:%M %p")
+
             horizontal_line()
 
             "your time"

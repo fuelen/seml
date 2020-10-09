@@ -9,7 +9,7 @@ defmodule EmailSystem.Tags.Translate do
     assigns = tag.attributes
     warn_on_unknown_pattern? = get_in(context, [:translate, :warn_on_unknown_pattern]) || false
 
-    tag.content
+    tag.children
     |> Enum.map(fn
       key_pattern when is_binary(key_pattern) ->
         appearance = Map.fetch!(context, :appearance)

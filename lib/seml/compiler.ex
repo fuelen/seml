@@ -15,6 +15,12 @@ defmodule Seml.Compiler do
   end
 
   defp compiler_callback(element_protocol, analysis) do
+    report_error =
+      case analysis do
+        :warn -> fn error, stacktrace -> error |> Exception.message() |> IO.warn(stacktrace) end
+        :raise -> &reraise/2
+      end
+
     fn element, compiler, context ->
       case element do
         %Seml.Tag{} = tag ->
@@ -35,10 +41,7 @@ defmodule Seml.Compiler do
                   analyzer_name: analyzer_name
                 )
 
-              case analysis do
-                :warn -> error |> Exception.message() |> IO.warn(tag.stacktrace)
-                :raise -> reraise error, tag.stacktrace
-              end
+              report_error.(error, tag.stacktrace)
           end)
 
         _ ->
@@ -52,7 +55,7 @@ defmodule Seml.Compiler do
   def analyze(tag, context) do
     for {function_name, input} <- [
           attributes_analyzer: tag.attributes,
-          content_analyzer: tag.content,
+          children_analyzer: tag.children,
           context_analyzer: context
         ] do
       if function_exported?(tag.implementation, function_name, 0) do

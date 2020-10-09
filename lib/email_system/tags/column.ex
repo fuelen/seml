@@ -7,10 +7,10 @@ defmodule EmailSystem.Tags.Column do
 
   @impl true
   def compile(tag, compile, context) when is_compiler(context, EmailSystem.Compilers.HTML) do
-    ["<div>", compile.(tag.content, compile, context), "</div>"]
+    ["<div>", compile.(tag.children, compile, context), "</div>"]
   end
 
   def compile(tag, compile, context) when is_compiler(context, EmailSystem.Compilers.Text) do
-    compile.(tag.content, compile, context)
+    compile.(tag.children, compile, context)
   end
 end

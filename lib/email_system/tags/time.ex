@@ -15,7 +15,7 @@ defmodule EmailSystem.Tags.Time do
   end
 
   @impl Seml.Tag
-  def content_analyzer do
+  def children_analyzer do
     spec(Enum.empty?())
   end
 

@@ -7,10 +7,10 @@ defmodule EmailSystem.Tags.Section do
 
   @impl true
   def compile(tag, compile, context) when is_compiler(context, EmailSystem.Compilers.HTML) do
-    ["<section>", compile.(tag.content, compile, context), "</section>"]
+    ["<section>", compile.(tag.children, compile, context), "</section>"]
   end
 
   def compile(tag, compile, context) when is_compiler(context, EmailSystem.Compilers.Text) do
-    compile.(tag.content, compile, context)
+    compile.(tag.children, compile, context)
   end
 end

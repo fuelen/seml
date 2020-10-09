@@ -16,22 +16,22 @@ defmodule Seml.System do
 
       name = implementation.name()
 
-      defmacro unquote(name)(content_or_attrs \\ nil, maybe_content \\ nil) do
-        {attrs, content} = Seml.System.extract_content(content_or_attrs, maybe_content)
+      defmacro unquote(name)(children_or_attrs \\ nil, maybe_children \\ nil) do
+        {attrs, children} = Seml.System.extract_children(children_or_attrs, maybe_children)
         name = unquote(name)
         implementation = unquote(implementation)
 
         quote bind_quoted: [
                 name: name,
                 attrs: attrs,
-                content: content,
+                children: children,
                 implementation: implementation
               ] do
           %Seml.Tag{
             implementation: implementation,
             name: name,
             attributes: Map.new(attrs),
-            content: content,
+            children: children,
             stacktrace: self() |> Process.info(:current_stacktrace) |> elem(1) |> tl()
           }
         end
@@ -42,15 +42,15 @@ defmodule Seml.System do
   @empty_attributes quote(do: %{})
 
   @doc false
-  def extract_content(content_or_attrs, maybe_content) do
-    case {content_or_attrs, maybe_content} do
-      {[{:do, {:__block__, _, content}}], _} -> {@empty_attributes, content}
-      {[{:do, content}], _} -> {@empty_attributes, List.wrap(content)}
-      {attrs, [{:do, {:__block__, _, content}}]} -> {wrap_attributes(attrs), content}
-      {attrs, [{:do, content}]} -> {wrap_attributes(attrs), List.wrap(content)}
+  def extract_children(children_or_attrs, maybe_children) do
+    case {children_or_attrs, maybe_children} do
+      {[{:do, {:__block__, _, children}}], _} -> {@empty_attributes, children}
+      {[{:do, children}], _} -> {@empty_attributes, List.wrap(children)}
+      {attrs, [{:do, {:__block__, _, children}}]} -> {wrap_attributes(attrs), children}
+      {attrs, [{:do, children}]} -> {wrap_attributes(attrs), List.wrap(children)}
       {[{_, _} | _] = attrs, nil} -> {attrs, []}
-      {content, nil} -> {@empty_attributes, List.wrap(content)}
-      {attrs, content} -> {wrap_attributes(attrs), List.wrap(content)}
+      {children, nil} -> {@empty_attributes, List.wrap(children)}
+      {attrs, children} -> {wrap_attributes(attrs), List.wrap(children)}
     end
   end
 
