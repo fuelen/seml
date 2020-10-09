@@ -22,7 +22,7 @@ defmodule Seml.Tag do
   end
 
   @callback name() :: atom()
-  @callback compile(compile_fn :: fun(), term(), map()) :: term()
+  @callback compile(term(), compile_fn :: fun(),  map()) :: term()
   @callback attributes_analyzer() :: Seml.Tag.Analyzer.t()
   @callback children_analyzer() :: Seml.Tag.Analyzer.t()
   @callback context_analyzer() :: Seml.Tag.Analyzer.t()
