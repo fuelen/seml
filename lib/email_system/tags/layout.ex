@@ -6,15 +6,15 @@ defmodule EmailSystem.Tags.Layout do
   def name, do: :layout
 
   @impl true
-  def compile(tag, compile, context) when is_compiler(context, EmailSystem.Compilers.HTML) do
+  def compile(props, compile, context) when is_compiler(context, EmailSystem.Compilers.HTML) do
     [
       "<html><head><style></style></head><body>",
-      compile.(tag.children, compile, context),
+      compile.(props.children, compile, context),
       "</body></html>"
     ]
   end
 
-  def compile(tag, compile, context) when is_compiler(context, EmailSystem.Compilers.Text) do
-    compile.(tag.children, compile, context)
+  def compile(props, compile, context) when is_compiler(context, EmailSystem.Compilers.Text) do
+    compile.(props.children, compile, context)
   end
 end

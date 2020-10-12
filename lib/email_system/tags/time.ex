@@ -4,19 +4,15 @@ defmodule EmailSystem.Tags.Time do
   import Norm
 
   @impl Seml.Tag
-  def attributes_analyzer do
+  def props_analyzer do
     selection(
       schema(%{
         format: spec(is_binary()),
-        value: spec(is_struct(Time))
+        value: spec(is_struct(Time)),
+        children: spec(Enum.empty?())
       }),
       [:format, :value]
     )
-  end
-
-  @impl Seml.Tag
-  def children_analyzer do
-    spec(Enum.empty?())
   end
 
   @impl Seml.Tag
@@ -34,17 +30,21 @@ defmodule EmailSystem.Tags.Time do
   def name, do: :time
 
   @impl Seml.Tag
-  def compile(%{attributes: %{format: format, value: value}}, compile, context)
+  def compile(props, compile, context)
       when is_compiler(context, EmailSystem.Compilers.HTML) do
-    ["<time>", compile.(Calendar.strftime(value, format), compile, context), "</time>"]
+    [
+      "<time>",
+      compile.(Calendar.strftime(props.value, props.format), compile, context),
+      "</time>"
+    ]
   end
 
   def compile(
-        %{attributes: %{format: format, value: value}},
+        props,
         compile,
         context
       )
       when is_compiler(context, EmailSystem.Compilers.Text) do
-    value |> Calendar.strftime(format) |> compile.(compile, context)
+    props.value |> Calendar.strftime(props.format) |> compile.(compile, context)
   end
 end

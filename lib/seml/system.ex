@@ -30,8 +30,7 @@ defmodule Seml.System do
           %Seml.Tag{
             implementation: implementation,
             name: name,
-            attributes: Map.new(attrs),
-            children: children,
+            props: attrs |> Map.new() |> Map.put(:children, children),
             stacktrace: self() |> Process.info(:current_stacktrace) |> elem(1) |> tl()
           }
         end
@@ -39,22 +38,22 @@ defmodule Seml.System do
     end
   end
 
-  @empty_attributes quote(do: %{})
+  @empty_props quote(do: %{})
 
   @doc false
   def extract_children(children_or_attrs, maybe_children) do
     case {children_or_attrs, maybe_children} do
-      {[{:do, {:__block__, _, children}}], _} -> {@empty_attributes, children}
-      {[{:do, children}], _} -> {@empty_attributes, List.wrap(children)}
-      {attrs, [{:do, {:__block__, _, children}}]} -> {wrap_attributes(attrs), children}
-      {attrs, [{:do, children}]} -> {wrap_attributes(attrs), List.wrap(children)}
+      {[{:do, {:__block__, _, children}}], _} -> {@empty_props, children}
+      {[{:do, children}], _} -> {@empty_props, List.wrap(children)}
+      {attrs, [{:do, {:__block__, _, children}}]} -> {wrap_props(attrs), children}
+      {attrs, [{:do, children}]} -> {wrap_props(attrs), List.wrap(children)}
       {[{_, _} | _] = attrs, nil} -> {attrs, []}
-      {children, nil} -> {@empty_attributes, List.wrap(children)}
-      {attrs, children} -> {wrap_attributes(attrs), List.wrap(children)}
+      {children, nil} -> {@empty_props, List.wrap(children)}
+      {attrs, children} -> {wrap_props(attrs), List.wrap(children)}
     end
   end
 
-  defp wrap_attributes(nil), do: @empty_attributes
-  defp wrap_attributes([]), do: @empty_attributes
-  defp wrap_attributes(attributes), do: attributes
+  defp wrap_props(nil), do: @empty_props
+  defp wrap_props([]), do: @empty_props
+  defp wrap_props(props), do: props
 end

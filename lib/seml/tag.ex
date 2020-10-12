@@ -1,20 +1,21 @@
 defmodule Seml.Tag do
-  @enforce_keys [:name, :attributes, :children, :implementation]
-  defstruct [:name, :attributes, :children, :implementation, :stacktrace]
+  @enforce_keys [:name, :props, :implementation]
+  defstruct [:name, :props, :implementation, :stacktrace]
 
   defimpl Inspect do
     import Inspect.Algebra
 
-    def inspect(%Seml.Tag{name: name, attributes: attributes, children: children}, opts) do
-      attributes = if attributes == %{}, do: empty(), else: to_doc(attributes, opts)
+    def inspect(%Seml.Tag{name: name, props: props}, opts) do
+      {children, props} = Map.pop(props, :children)
+      props = if props == %{}, do: empty(), else: to_doc(props, opts)
       children = if children in [nil, "", []], do: empty(), else: to_doc(children, opts)
 
       details =
-        case {attributes, children} do
+        case {props, children} do
           {:doc_nil, :doc_nil} -> empty()
           {:doc_nil, children} -> children
-          {attributes, :doc_nil} -> attributes
-          {attributes, children} -> glue(attributes, children)
+          {props, :doc_nil} -> props
+          {props, children} -> glue(props, children)
         end
 
       concat(["#", to_string(name), "<", details, ">"])
@@ -22,10 +23,9 @@ defmodule Seml.Tag do
   end
 
   @callback name() :: atom()
-  @callback compile(term(), compile_fn :: fun(),  map()) :: term()
-  @callback attributes_analyzer() :: Seml.Tag.Analyzer.t()
-  @callback children_analyzer() :: Seml.Tag.Analyzer.t()
+  @callback compile(term(), compile_fn :: fun(), map()) :: term()
+  @callback props_analyzer() :: Seml.Tag.Analyzer.t()
   @callback context_analyzer() :: Seml.Tag.Analyzer.t()
 
-  @optional_callbacks attributes_analyzer: 0, children_analyzer: 0, context_analyzer: 0
+  @optional_callbacks props_analyzer: 0, context_analyzer: 0
 end

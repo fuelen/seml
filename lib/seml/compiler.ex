@@ -54,8 +54,7 @@ defmodule Seml.Compiler do
 
   def analyze(tag, context) do
     for {function_name, input} <- [
-          attributes_analyzer: tag.attributes,
-          children_analyzer: tag.children,
+          props_analyzer: tag.props,
           context_analyzer: context
         ] do
       if function_exported?(tag.implementation, function_name, 0) do

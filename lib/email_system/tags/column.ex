@@ -6,11 +6,11 @@ defmodule EmailSystem.Tags.Column do
   def name, do: :column
 
   @impl true
-  def compile(tag, compile, context) when is_compiler(context, EmailSystem.Compilers.HTML) do
-    ["<div>", compile.(tag.children, compile, context), "</div>"]
+  def compile(props, compile, context) when is_compiler(context, EmailSystem.Compilers.HTML) do
+    ["<div>", compile.(props.children, compile, context), "</div>"]
   end
 
-  def compile(tag, compile, context) when is_compiler(context, EmailSystem.Compilers.Text) do
-    compile.(tag.children, compile, context)
+  def compile(props, compile, context) when is_compiler(context, EmailSystem.Compilers.Text) do
+    compile.(props.children, compile, context)
   end
 end

@@ -28,7 +28,7 @@ defmodule Test do
     layout do
       section width: 3 do
         column width: 1 do
-          translate name: name, country: country do
+          translate assigns: [name: name, country: country] do
             "Hello %{name}!"
             horizontal_line()
             "Let me show you what is the time in %{country}"

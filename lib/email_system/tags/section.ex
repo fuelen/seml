@@ -6,11 +6,11 @@ defmodule EmailSystem.Tags.Section do
   def name, do: :section
 
   @impl true
-  def compile(tag, compile, context) when is_compiler(context, EmailSystem.Compilers.HTML) do
-    ["<section>", compile.(tag.children, compile, context), "</section>"]
+  def compile(props, compile, context) when is_compiler(context, EmailSystem.Compilers.HTML) do
+    ["<section>", compile.(props.children, compile, context), "</section>"]
   end
 
-  def compile(tag, compile, context) when is_compiler(context, EmailSystem.Compilers.Text) do
-    compile.(tag.children, compile, context)
+  def compile(props, compile, context) when is_compiler(context, EmailSystem.Compilers.Text) do
+    compile.(props.children, compile, context)
   end
 end

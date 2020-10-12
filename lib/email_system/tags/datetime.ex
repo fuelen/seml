@@ -10,21 +10,21 @@ defmodule EmailSystem.Tags.DateTime do
   def context_analyzer do
     selection(
       schema(%{
-        datetime: schema(%{timezone: spec(is_binary())}),
+        datetime: schema(%{timezone: spec(is_binary())})
       }),
-      [datetime: [:timezone]]
+      datetime: [:timezone]
     )
   end
 
   @impl true
-  def compile(%{attributes: %{value: value} = attrs}, compile, context)
+  def compile(%{value: value} = attrs, compile, context)
       when is_compiler(context, EmailSystem.Compilers.HTML) do
     tz = Map.get(attrs, :timezone, context.datetime.timezone)
     datetime = DateTime.shift_zone!(value, tz)
     ["<time>", compile.(to_string(datetime), compile, context), "</time>"]
   end
 
-  def compile(%{attributes: %{value: value} = attrs}, compile, context)
+  def compile(%{value: value} = attrs, compile, context)
       when is_compiler(context, EmailSystem.Compilers.Text) do
     tz = Map.get(attrs, :timezone, context.datetime.timezone)
     datetime = DateTime.shift_zone!(value, tz)

@@ -4,7 +4,7 @@ end
 
 defimpl EmailSystem.Compilers.HTML.Element, for: Seml.Tag do
   def compile(element, compiler, context) do
-    element.implementation.compile(element, compiler, context)
+    element.implementation.compile(element.props, compiler, context)
   end
 end
 

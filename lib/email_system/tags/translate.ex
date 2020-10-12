@@ -4,12 +4,14 @@ defmodule EmailSystem.Tags.Translate do
   @impl true
   def name, do: :translate
 
+  # TODO: rename compile to render
+  # TODO: swap placement of render and context args, so we have render(props, context, render)
   @impl true
-  def compile(tag, compile, context) do
-    assigns = tag.attributes
+  def compile(props, compile, context) do
+    assigns = props.assigns
     warn_on_unknown_pattern? = get_in(context, [:translate, :warn_on_unknown_pattern]) || false
 
-    tag.children
+    props.children
     |> Enum.map(fn
       key_pattern when is_binary(key_pattern) ->
         appearance = Map.fetch!(context, :appearance)
