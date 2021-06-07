@@ -11,22 +11,15 @@ defmodule Seml.MixProject do
     ]
   end
 
-  # Run "mix help compile.app" to learn about applications.
   def application do
     [
       extra_applications: [:logger]
     ]
   end
 
-  # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      # FIXME: not a part of Seml
-      {:html_entities, "~> 0.4"},
-      # FIXME: not a part of Seml
-      {:tzdata, "~> 1.0.3"},
-      # TODO: make optional
-      {:norm, "~> 0.12.0"}
+      {:norm, "~> 0.12.0", optional: true}
     ]
   end
 end
