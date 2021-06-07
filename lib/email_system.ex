@@ -1,5 +1,5 @@
 defmodule EmailSystem do
-  use Seml.System
+  import Seml.System
 
   deftag(EmailSystem.Tags.Section)
   deftag(EmailSystem.Tags.Column)

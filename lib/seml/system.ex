@@ -1,18 +1,9 @@
 defmodule Seml.System do
-  defmacro __using__(_opts) do
-    quote do
-      Module.register_attribute(__MODULE__, :tags, accumulate: true)
-      import unquote(__MODULE__)
-    end
-  end
-
   defmacro deftag(implementation) do
     quote bind_quoted: [implementation: implementation] do
       unless Seml.Tag in Keyword.get(implementation.__info__(:attributes), :behaviour, []) do
         raise "#{implementation} module must implement Seml.Tag behaviour"
       end
-
-      Module.put_attribute(__MODULE__, :tags, implementation)
 
       name = implementation.name()
 
