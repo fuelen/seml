@@ -19,7 +19,8 @@ defmodule Seml.MixProject do
 
   defp deps do
     [
-      {:norm, "~> 0.12.0", optional: true}
+      {:norm, "~> 0.12.0", optional: true},
+      {:ex_doc, "~> 0.24", only: :dev}
     ]
   end
 end

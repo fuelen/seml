@@ -1,4 +1,15 @@
 defmodule Seml.Compiler do
+  @type option :: {:analysis, :none | :warn | :raise}
+  @typedoc """
+  Any term which implement a protocol described in `c:Seml.Compiler.element_protocol/0`.
+  """
+  @type element :: term()
+  @type context :: map()
+
+  @doc """
+  Compile terms to `iodata()`
+  """
+  @spec compile(element(), context(), compiler_module :: module, [option]) :: iodata()
   def compile(element, context, compiler_module, opts \\ []) when is_map(context) do
     element_protocol = compiler_module.element_protocol()
     analysis = Keyword.get(opts, :analysis, :none)
@@ -52,6 +63,7 @@ defmodule Seml.Compiler do
     end
   end
 
+  @doc false
   def analyze(tag, context) do
     for {function_name, input} <- [
           props_analyzer: tag.props,
@@ -70,5 +82,8 @@ defmodule Seml.Compiler do
     end
   end
 
+  @doc """
+  A link to protocol which encodes term to `iodata()`
+  """
   @callback element_protocol() :: module()
 end
